@@ -78,7 +78,13 @@ func (c *MistralClient) request(method string, jsonData map[string]interface{}, 
 	if err != nil {
 		return nil, err
 	}
-	uri.Path = path
+
+	if uri.Path != "" {
+		uri.Path = fmt.Sprintf("%s/%s", uri.Path, path)
+	} else {
+		uri.Path = path
+	}
+	
 	jsonValue, _ := json.Marshal(jsonData)
 	req, err := http.NewRequest(method, uri.String(), bytes.NewBuffer(jsonValue))
 	if err != nil {
